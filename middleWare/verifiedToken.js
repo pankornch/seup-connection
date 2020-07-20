@@ -2,14 +2,20 @@ const jwt = require('jsonwebtoken');
 
 
 module.exports = function (req, res, next) {
-    const [Bearer, token] = req.header('auth-token').split(' ')
+    let Bearer, token;
+
+    try {
+        [Bearer, token] = req.header('auth-token').split(' ');
+    } catch (error) {
+        return next();
+    }
 
     if (!token && Bearer !== 'Bearer') return res.json({ status: 404, msg: 'Access Denied' });
 
     try {
-        const verified = jwt.verify(token, process.env.SECRET_KEY);
-        req.user = verified
-        next()
+        req.user = jwt.verify(token, process.env.SECRET_KEY);
+        
+        next();
     } catch (error) {
         res.json({ status: 404, msg: 'Invalid Token' })
     }

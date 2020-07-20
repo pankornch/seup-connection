@@ -2,8 +2,8 @@ const { joinTable } = require('../DB/db')
 
 module.exports.Stack = new class Stack {
     constructor() {
-        this.items = []
-        this.total = 0
+        this.items = [];
+        this.total = 0;
     }
 
     add(value) {

@@ -19,3 +19,6 @@
 // const { register } = require('./Users/validation');
 // console.log(register('hello'))
 // require('dotenv').config();
+
+const {fetchUsers} = require('./DB/db')
+fetchUsers().then(v => console.log(v))
