@@ -12,10 +12,10 @@ router.post('/register', async (req, res) => {
 
     if (await isRegister(body.s_id)) return res.send("can not register");
 
-    register({ s_id: body.s_id, password: body.password, pin: body.pin });
+    register(body);
 
     res.json({
-        msg: 'Register Successful',
+        msg: 'Success',
         token: genToken(body.s_id)
     });
 });
@@ -25,20 +25,14 @@ router.post('/login', verifiedToken, async (req, res) => {
 
 
     if (!req.user && ! await verifyPassword(body)) return res.send('invalid username or password');
-
     if (!body) return res.send('Invaid data');
 
     existUser(body.s_id || req.user.id_).then(el => {
+        const {password, ...rest} = el;
         res.json({
-            msg: 'Login Successful',
+            msg: 'Success',
             token: genToken(body.s_id),
-            user: {
-                s_id: el.s_id,
-                firstName: el.firstName,
-                lastName: el.lastName,
-                nickName: el.nickName,
-                permission: el.permission
-            }
+            user: {...rest }
         });
     })
 })

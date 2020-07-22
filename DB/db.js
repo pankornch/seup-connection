@@ -9,27 +9,48 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 
+module.exports.db = db;
+
+
 
 module.exports.onRegister = (payload) => {
-    db.collection('users').doc(payload.s_id).update({ password: payload.password })
+    db.collection('users').doc(payload.s_id).update(payload)
 }
+
+
+
 module.exports.fetchUsers = async () => {
     let arr = []
     const snapShot = await db.collection("users").get();
     snapShot.forEach(el => arr.push({
         _id: el.id,
-        s_id: el.data().s_id,
-        firstName: el.data().firstName,
-        lastName: el.data().lastName,
-        nickName: el.data().nickName,
-        password: el.data().password,
-        permission: el.data().permission
+        ...el.data()
     }));
 
     return arr;
 }
 
+
+module.exports.fetchJoinTable = async () => {
+
+    let arr = [];
+    const snapShot = await db.collection('joinTable').get();
+    snapShot.forEach(el => arr.push(el.data()));
+
+    const twin = await db.collection('joinTable').doc('twin').get();
+    return { twin: twin.data(), user: arr.filter(v => v.isTwin !== true) };
+}
+
+
+module.exports.addJoinTable = (payload) => {
+    const genID = uuid.v4().split('-').join('').slice(0, 20)
+    db.collection('joinTable').doc(genID).set(payload)
+    db.collection('users').doc(payload.fresher).update({ random: true })
+
+}
+
 module.exports.addUser = (payload) => {
 
     db.collection('users').doc(payload.s_id).set(payload);
+    // db.collection('users').doc(payload.s_id).update({ twin: payload.twin })
 }

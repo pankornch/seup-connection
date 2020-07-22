@@ -1,24 +1,22 @@
-// const bcrypt = require('bcryptjs');
+const { addJoinTable, addUser } = require('./DB/db');
 
-// function test(x) {
-//     const salt = bcrypt.genSaltSync(10);
-//     const hashed = bcrypt.hashSync(x, salt)
-//     return hashed
-// }
+// const data = [
+//     { s_id: "62021450", twin: "1" },
+//     { s_id: "62021382", twin: "2" },
+//     { s_id: "62021427", twin: "3" },
+//     { s_id: "62021315", twin: "4" }
+// ];
 
-// console.log(test('rootadmin'));
+// addJoinTable({ data });
 
-// async function a() {
 
-    
-//     const fecthUsers = await require('./Users/Users');
-//     console.log(fecthUsers)
-// }
-// a()
 
-// const { register } = require('./Users/validation');
-// console.log(register('hello'))
-// require('dotenv').config();
-
-const {fetchUsers} = require('./DB/db')
-fetchUsers().then(v => console.log(v))
+// const isTwin = [
+//     { s_id: "62021461", twin: "1" },
+//     { s_id: "62023160", twin: "2" },
+//     { s_id: "62021472", twin: "3" },
+//     { s_id: "62021551", twin: "4" },
+// ]
+// isTwin.forEach(v => {
+//     addUser(v)
+// })

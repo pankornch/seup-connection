@@ -1,4 +1,5 @@
-const { joinTable } = require('../DB/db')
+
+
 
 module.exports.Stack = new class Stack {
     constructor() {
@@ -6,10 +7,15 @@ module.exports.Stack = new class Stack {
         this.total = 0;
     }
 
+    clear() {
+        this.items = [];
+        this.total = 0;
+    }
+
     add(value) {
         this.items[this.total] = value
         this.total++
-        console.log(value);
+        // console.log(value)
     }
 
     pop() {
