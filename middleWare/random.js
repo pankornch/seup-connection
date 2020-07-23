@@ -25,25 +25,26 @@ const random = (userId) => {
                 const re = [sop_rnd, sop.filter(v => v.s_id === g.s_id)[0]];
 
                 addJoinTable({
-                    sopohomore: [
+                    sophomore: [
                         { s_id: re[0].s_id },
                         { s_id: re[1].s_id }
                     ],
                     fresher: userId
                 });
 
-                return resolve(["JACK POT", { 1: { firstName: re[0].firstName }, 2: { firstName: re[1].firstName } }]);
+                // return resolve(["JACK POT", { 1: { firstName: re[0].firstName }, 2: { firstName: re[1].firstName } }]);
+                return resolve(["JACK POT!!!"])
             }
 
 
             addJoinTable({
-                sopohomore: [
+                sophomore: [
                     { s_id: sop_rnd.s_id },
                 ],
                 fresher: userId
             });
 
-            resolve(sop_rnd.firstName);
+            resolve();
         })
     })
 

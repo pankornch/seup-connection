@@ -1,4 +1,4 @@
-const { fetchUsers, fetchJoinTable } = require('../DB/db');
+const { fetchUsers, fetchJoinTable, fetchUser } = require('../DB/db');
 
 
 const membersSophomore = async () => {
@@ -16,6 +16,11 @@ const joinTable = async () => {
     return await fetchJoinTable();
 }
 
+const User = async (user) => {
+    return await fetchUser(user);
+}
+
 module.exports.joinTable = joinTable;
 module.exports.membersSophomore = membersSophomore;
 module.exports.membersFresher = membersFresher;
+module.exports.User = User;

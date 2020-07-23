@@ -40,7 +40,7 @@ module.exports.verifyPassword = async (payload) => {
 
 module.exports.isRandom = async (id) => {
     const user = await existUser(id);
-    return user.random
+    return user.random;
 }
 
 

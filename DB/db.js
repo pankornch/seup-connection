@@ -26,10 +26,13 @@ module.exports.fetchUsers = async () => {
         _id: el.id,
         ...el.data()
     }));
-
     return arr;
 }
 
+module.exports.fetchUser = async (user) => {
+    const fetch_ = await db.collection('user').doc(user).get();
+    return fetch_.data();
+}
 
 module.exports.fetchJoinTable = async () => {
 
@@ -38,6 +41,7 @@ module.exports.fetchJoinTable = async () => {
     snapShot.forEach(el => arr.push(el.data()));
 
     const twin = await db.collection('joinTable').doc('twin').get();
+
     return { twin: twin.data(), user: arr.filter(v => v.isTwin !== true) };
 }
 
