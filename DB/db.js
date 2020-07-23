@@ -18,19 +18,15 @@ module.exports.onRegister = (payload) => {
 }
 
 
-
-module.exports.fetchUsers = async () => {
-    let arr = []
-    const snapShot = await db.collection("users").get();
-    snapShot.forEach(el => arr.push({
-        _id: el.id,
-        ...el.data()
-    }));
-    return arr;
+module.exports.fetchSophomore = async () => {
+    const arr = [];
+    const fetch_ = await db.collection('users').where("permission", "==", "sophomore").get();
+    fetch_.forEach(el => arr.push({ id: el.id, ...el.data() }))
 }
 
-module.exports.fetchUser = async (user) => {
-    const fetch_ = await db.collection('user').doc(user).get();
+
+module.exports.fetchUser = async (id) => {
+    const fetch_ = await db.collection('users').doc(id).get();
     return fetch_.data();
 }
 
@@ -53,8 +49,17 @@ module.exports.addJoinTable = (payload) => {
 
 }
 
+// For Admin
+
 module.exports.addUser = (payload) => {
 
     db.collection('users').doc(payload.s_id).set(payload);
     // db.collection('users').doc(payload.s_id).update({ twin: payload.twin })
 }
+
+// module.exports.fetchForAdmin = async () => {
+//     const snapShot = await db.collection('users').get();
+//     const arr = [];
+//     snapShot.forEach(snap => arr.push(snap.data()));
+//     return arr;
+// }

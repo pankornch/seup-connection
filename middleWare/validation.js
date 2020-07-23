@@ -1,7 +1,10 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const { onRegister, fetchUsers } = require('../DB/db');
+const { onRegister } = require('../DB/db');
+const { User } = require('../Users/Users')
+
+
 
 module.exports.register = function register(user) {
 
@@ -14,8 +17,7 @@ module.exports.register = function register(user) {
 
 
 async function existUser(id) {
-    const fetch_ = await fetchUsers();
-    return fetch_.find(el => el.s_id === id);
+    return await User(id);
 }
 module.exports.existUser = existUser;
 
@@ -25,8 +27,7 @@ module.exports.genToken = (id) => {
 }
 
 module.exports.isRegister = async (id) => {
-    const fetch_ = await fetchUsers();
-    const user = fetch_.find(el => el.s_id === id);
+    const user = await existUser(id);
     return user.password;
 }
 
@@ -35,6 +36,7 @@ module.exports.verifyPassword = async (payload) => {
 
     const user = await existUser(payload.s_id);
     if (!user.password) return false;
+
     return bcrypt.compareSync(payload.password, user.password);
 }
 

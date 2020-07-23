@@ -33,7 +33,7 @@ const random = (userId) => {
                 });
 
                 // return resolve(["JACK POT", { 1: { firstName: re[0].firstName }, 2: { firstName: re[1].firstName } }]);
-                return resolve(["JACK POT!!!"])
+                return resolve("JACK POT!!!")
             }
 
 
