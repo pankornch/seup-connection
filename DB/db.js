@@ -22,6 +22,7 @@ module.exports.fetchSophomore = async () => {
     const arr = [];
     const fetch_ = await db.collection('users').where("permission", "==", "sophomore").get();
     fetch_.forEach(el => arr.push({ id: el.id, ...el.data() }))
+    return arr;
 }
 
 
@@ -56,6 +57,12 @@ module.exports.addUser = (payload) => {
     db.collection('users').doc(payload.s_id).set(payload);
     // db.collection('users').doc(payload.s_id).update({ twin: payload.twin })
 }
+
+
+module.exports.sentHint = (id, hint) => {
+    db.collection('users').doc(id).update({ hint })
+}
+
 
 // module.exports.fetchForAdmin = async () => {
 //     const snapShot = await db.collection('users').get();

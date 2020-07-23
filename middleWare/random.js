@@ -1,9 +1,9 @@
 const { membersSophomore, joinTable } = require('../Users/Users');
 const { addJoinTable } = require('../DB/db');
 
-const random = (userId) => {
+const random = async (userId) => {
     return new Promise((resolve, reject) => {
-
+        
         membersSophomore().then(async sop => {
             const join = await joinTable();
             const twin = join.twin.data;
