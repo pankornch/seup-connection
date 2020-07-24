@@ -12,6 +12,8 @@ app.use(cors());
 app.use('/auth', require('./routes/auth'));
 app.use('/post', require('./routes/post'));
 
+app.use('/', (req, res) => res.redirect('/'));
+
 ipv4().then(ip => {
     app.listen(process.env.PORT || 3000, ip, () => console.log(`server started http://${ip}:${3000}`));
 });

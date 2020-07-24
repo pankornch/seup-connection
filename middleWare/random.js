@@ -1,28 +1,37 @@
 const { membersSophomore, joinTable } = require('../Users/Users');
-const { addJoinTable } = require('../DB/db');
+const { addJoinTable, snapSophomore } = require('../DB/db');
 
 const random = async (userId) => {
     return new Promise((resolve, reject) => {
-        
-        membersSophomore().then(async sop => {
+
+        let arr = [];
+        snapSophomore.where('random', '==', false).onSnapshot(snap => {
+            snap.docs.forEach(e => arr.push(e.data()));
+            RND(arr)
+            arr = []
+        })
+
+        const RND = async (data) => {
+            
+            if (!userId) return;
+            
             const join = await joinTable();
             const twin = join.twin.data;
 
-            const twinId = twin.map(v => v.s_id);
-            const sopId = sop.map(v => v.s_id);
+            const twinID = twin.map(v => v.s_id);
+            const sopID = data.map(v => v.s_id);
 
-            const rndable = sopId.filter(e => !twinId.includes(e));
+            const rndable = sopID.filter(e => !twinID.includes(e));
 
 
-            const rnd = rndable[Math.floor(Math.random() * rndable.length)];
-
-            const [sop_rnd] = sop.filter(v => v.s_id === rnd);
+            const onRandom = rndable[Math.floor(Math.random() * rndable.length)];
+            const [sop_rnd] = data.filter(v => v.s_id === onRandom);
 
 
             if (sop_rnd.twin) {
                 const g = twin.filter(e => e.twin === sop_rnd.twin)[0];
 
-                const re = [sop_rnd, sop.filter(v => v.s_id === g.s_id)[0]];
+                const re = [sop_rnd, data.filter(v => v.s_id === g.s_id)[0]];
 
                 addJoinTable({
                     sophomore: [
@@ -33,19 +42,18 @@ const random = async (userId) => {
                 });
 
                 // return resolve(["JACK POT", { 1: { firstName: re[0].firstName }, 2: { firstName: re[1].firstName } }]);
+                userId = null;
                 return resolve("JACK POT!!!")
             }
 
-
             addJoinTable({
-                sophomore: [
-                    { s_id: sop_rnd.s_id },
-                ],
+                sophomore: [{ s_id: sop_rnd.s_id }],
                 fresher: userId
             });
 
-            resolve();
-        })
+            userId = null;
+            return resolve();
+        }
     })
 
 }

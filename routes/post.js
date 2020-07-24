@@ -1,29 +1,34 @@
 const express = require('express');
 const router = express.Router();
-const { joinTable, User, admin } = require('../Users/Users');
+const { joinTable, User, admin, membersSophomore } = require('../Users/Users');
 const { random } = require('../middleWare/random');
 const { isRandom } = require('../middleWare/validation')
 const logger = require('../middleWare/logger');
 const verifyToken = require('../middleWare/verifiedToken');
 
-const {sentHint} = require('../DB/db');
+const { sentHint } = require('../DB/db');
 
-// router.get("/", logger, async (req, res) => {
-//     const fetch_ = await admin();
-//     res.header("Content-Type", 'application/json')
-//     res.send(JSON.stringify(fetch_, null, 4));
-// })
+router.get("/admin", verifyToken, logger, async (req, res) => {
+    if (!req.user) return res.redirect('/');
+
+    const fetch_ = await membersSophomore();
+    res.header("Content-Type", 'application/json')
+    res.send(JSON.stringify(fetch_, null, 4));
+    console.log(fetch_.length)
+})
 
 router.post('/sentHint/:id', (req, res) => {
     const id = req.params.id;
     const hint = req.body.hint;
-    
+
     sentHint(id, hint)
     res.send(id)
 
 })
 
 router.post('/random', verifyToken, logger, async (req, res) => {
+    if (!req.user) return res.redirect('/');
+
     const body = req.body;
 
     if (await isRandom(body.s_id)) return res.send('can not random');
@@ -32,6 +37,9 @@ router.post('/random', verifyToken, logger, async (req, res) => {
 })
 
 router.post('/getHint/:id', verifyToken, logger, async (req, res) => {
+    console.log(req.user)
+    if (!req.user) return res.redirect('/');
+
     const id = req.params.id;
     const permission = req.body.permission;
     const fetch_ = await joinTable();

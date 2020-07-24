@@ -9,7 +9,7 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 
-module.exports.db = db;
+module.exports.snapSophomore = db.collection('users').where('permission', '==', "sophomore")
 
 
 
@@ -44,29 +44,35 @@ module.exports.fetchJoinTable = async () => {
 
 
 module.exports.addJoinTable = (payload) => {
+    console.log(payload)
     const genID = uuid.v4().split('-').join('').slice(0, 20)
     db.collection('joinTable').doc(genID).set(payload)
     db.collection('users').doc(payload.fresher).update({ random: true })
+    payload.sophomore.forEach(el => {
+        db.collection("users").doc(el.s_id).update({ random: true })
+    })
 
 }
 
 // For Admin
 
-module.exports.addUser = (payload) => {
+// module.exports.addUser = (payload) => {
 
-    db.collection('users').doc(payload.s_id).set(payload);
-    // db.collection('users').doc(payload.s_id).update({ twin: payload.twin })
-}
-
-
-module.exports.sentHint = (id, hint) => {
-    db.collection('users').doc(id).update({ hint })
-}
-
-
-// module.exports.fetchForAdmin = async () => {
-//     const snapShot = await db.collection('users').get();
-//     const arr = [];
-//     snapShot.forEach(snap => arr.push(snap.data()));
-//     return arr;
+//     db.collection('users').doc(payload.s_id).set(payload);
+// db.collection('users').doc(payload.s_id).update({ twin: payload.twin })
 // }
+
+
+// module.exports.sentHint = (id, hint) => {
+//     db.collection('users').doc(id).update({ hint })
+// }
+
+
+// async function dd() {
+//     const snap = await db.collection('users').get()
+//     snap.forEach(el => {
+//         db.collection('users').doc(el.data().s_id).update({ random: false })
+//     })
+// }
+
+// module.exports.dd = dd;

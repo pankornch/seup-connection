@@ -25,7 +25,6 @@ router.post('/login', logger, verifiedToken, async (req, res) => {
     const body = req.body;
 
     if (!req.user && ! await verifyPassword(body) && !body) return res.send('invalid username or password');
-
     existUser(body.s_id || req.user.id_).then(el => {
         const { password, ...rest } = el;
         res.json({
@@ -45,13 +44,6 @@ router.post('/addUser', logger, (req, res) => {
     addUser(user);
     res.send('');
 });
-
-
-router.get('/test/:id', logger, (req, res) => {
-    const id = req.params.id;
-    existUser(id).then(r => res.send(r))
-})
-
 
 module.exports = router;
 
