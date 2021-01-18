@@ -3,17 +3,15 @@
     <div>
       <h1>Dashboard</h1>
       <p>รายชื่อแสดงการจับคู่สายรหัสโดยการใช้ระบบสุ่ม ระหว่างรหัสนักศึกษา 62 และรหัสนักศึกษา 63</p>
+
       <div class="d-flex justify-content-end">
-        <b-button variant="danger" @click="onLogout">Logout</b-button>
+        <b-button variant="danger" @click="onLogout" style="margin: 1rem 0;">Logout</b-button>
       </div>
     </div>
 
-    <!-- <div>
-      <h3><span>ชื่อพี่</span><span>{{user.nickName}}</span></h3>
-      <h3><span>ชื่อน้อง</span><span>{{hint.nickName}}</span></h3>
-      <h3><span>คำใบ้</span><span>{{user.hint}}</span></h3>
-    </div>-->
     <b-table striped hover :items="[relabel]" :fields="fields"></b-table>
+
+    <b-table :items="[rHint]" :fields="fieldsHint" style="margin-top: 5rem;"></b-table>
   </div>
 </template>
 
@@ -24,51 +22,55 @@ export default {
   data() {
     return {
       fields: [
-        { key: "fullName_62", label: "ชื่อพี่" },
+        { key: "fullName_62", label: "ชื่อจริงพี่" },
         { key: "nickName_62", label: "ชื่อเล่นพี่" },
-        { key: "fullName_63", label: "ชื่อน้อง" },
-        { key: "nickName_63", label: "ชื่อเล่นน้อง" },
-        { key: "hint", label: "คำใบ้" },
+        { key: "fullName_63", label: "ชื่อจริงน้อง" },
+        { key: "nickName_63", label: "ชื่อน้อง" },
       ],
+      fieldsHint: [{ key: "hint", label: "คำใบ้" }],
     };
   },
   computed: {
     relabel() {
+      let hint;
+      if (!this.hint || this.hint.length == 0) {
+        hint = {
+          firstName: "",
+          lastName: "",
+          nickName: "",
+        };
+      } else {
+        hint = this.hint;
+      }
       try {
         return {
           // Senior
           StudentID_62: this.user.s_id,
           nickName_62: this.user.nickName,
-          fullName_62: `${this.user.firstName}  ${this.user.lastName}`,
+          fullName_62: `${this.getName}  ${this.user.lastName}`,
           hint: this.user.hint,
-          nickName_63: this.hint.nickName || "",
-          fullName_63: `${this.hint.firstName || ""}  ${
-            this.hint.lastName || ""
-          }`,
+          nickName_63: hint.nickName,
+          fullName_63: `${hint.firstName}  ${hint.lastName}`,
         };
       } catch (error) {}
+    },
+    rHint() {
+      try {
+        return { hint: this.user.hint };
+      } catch (error) {}
+    },
+    getName() {
+      return this.user.firstName.replace(/นาย|นางสาว|นาง/g, () => "");
     },
   },
   methods: {
     onLogout() {
       this.$store.dispatch("logout");
-      this.$router.push("/");
     },
   },
 };
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap");
-* {
-  font-family: "Poppins", sans-serif;
-}
-h1 {
-  text-align: center;
-  font-size: 50px;
-}
-p {
-  text-align: center;
-  color: #9c9c9c;
-}
+@import '../styles/senior.css';
 </style>

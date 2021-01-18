@@ -1,21 +1,19 @@
 <template>
-  <div class="bg">
-    <div>
+  <div>
+    <Dashboard v-if="autoLogin" />
+    <div class="bg" v-else>
       <keep-alive>
         <login v-on:change="change" v-if="status === 'login'" />
         <register v-on:change="change" v-else />
       </keep-alive>
     </div>
-    <!-- <div>
-      <greeting />
-    </div> -->
   </div>
 </template>
 
 <script>
 import login from "../components/Login";
 import register from "../components/Register";
-import dashBoard from "./Dashboard";
+import Dashboard from "./Dashboard";
 import greeting from "../components/Greeting";
 import { mapGetters } from "vuex";
 export default {
@@ -23,18 +21,21 @@ export default {
   components: {
     login,
     register,
-    dashBoard,
-    greeting
+    Dashboard,
   },
   data() {
     return {
-      status: "login"
+      status: "login",
+      user: false,
     };
   },
   methods: {
     change(e) {
       this.status = e;
-    }
+    },
+  },
+  computed: {
+    ...mapGetters({ autoLogin: "getterAutologin" }),
   },
 };
 </script>

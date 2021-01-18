@@ -11,23 +11,23 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
     meta: { title: 'Login - Software (TH)' }
   },
-  {
-    path: '/admin',
-    name: 'Admin',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Admin.vue'),
-    // meta: { title: 'Admin', requiresAuth: true },
-  },
+  // {
+  //   path: '/admin',
+  //   name: 'Admin',
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/Admin.vue'),
+  //   // meta: { title: 'Admin', requiresAuth: true },
+  // },
   {
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
     meta: { title: 'Dashboard - Software (TH)', requiresAuth: true }
   },
-  {
-    path:'/test',
-    name: 'test',
-    component: () => import(/* webpackChunkName: "about" */ '../views/test.vue'),
-  }
+  // {
+  //   path:'/test',
+  //   name: 'test',
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/test.vue'),
+  // }
 ]
 
 const router = new VueRouter({

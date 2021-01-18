@@ -13,28 +13,28 @@ export default new Vuex.Store({
     status: null,
     user: null,
     verified: null,
-    data: null,
-    hint: null,
-    err: null
+    hint: [],
+    err: '',
+    n: 0
   },
   mutations: {
 
     SET_STATUS(state, res) {
-      if (res.msg !== 'Success') return state.err = res
+      state.n++
+      if (res.msg !== 'Success') return state.err = `${res}, ${state.n}`;
+      state.err = `Login Sucessful, ${state.n}`
       Token.setToken(res.token)
       state.status = true;
     },
-
     SET_USER(state, user) {
       state.user = user;
     },
-
     ALL_USER(state, data) {
       state.data = data;
     },
     SET_HINT(state, hint) {
       state.hint = hint;
-    }
+    },
   },
   actions: {
 
@@ -51,14 +51,6 @@ export default new Vuex.Store({
       context.commit('SET_USER', verified.user);
     },
 
-    AddUser(context, data) {
-      axios.post(`${URL}/auth/addUser`, data)
-    },
-
-    fetchUsers(context) {
-      axios.get(`${URL}/post`).then(res => context.commit('ALL_USER', res.data));
-    },
-
     onRandom(context, payload) {
       const token = Token.getToken();
       axios.post(`${URL}/post/random`, payload, {
@@ -72,9 +64,9 @@ export default new Vuex.Store({
       location.reload();
     },
 
-    getHint(context, payload) {
+    getHint(context, s_id) {
       const token = Token.getToken();
-      axios.post(`${URL}/post/getHint/${payload.s_id}`, { ...payload }, {
+      axios.get(`${URL}/post/getHint/${s_id}`, {
         headers: {
           'auth-token': token
         }
@@ -82,15 +74,6 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    getterTotalUsers(state) {
-      return state.totalMember;
-    },
-    getterFetchUsers_62(state) {
-      return state.allUsers_62
-    },
-    getterFetchUsers_63(state) {
-      return state.allUsers_63
-    },
     getterStatus(state) {
       return state.status
     },
@@ -102,9 +85,6 @@ export default new Vuex.Store({
     },
     getterHint(state) {
       return state.user
-    },
-    getterAll(state) {
-      return state.data;
     },
     getterHint(state) {
       return state.hint;

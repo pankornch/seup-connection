@@ -1,32 +1,37 @@
 <template>
   <div class="bg">
     <header>
-      <a href="/" class="logo">Software Engineering</a>
-      <nav>
-        <ul>
-          <li>
-            <a @click="onLogout">Log out</a>
-          </li>
-        </ul>
-      </nav>
+      <a class="logo">Software Engineering</a>
+      <div class="nav-logout">
+        <a @click="onLogout" id="logout">Log out</a>
+      </div>
     </header>
+
     <section>
       <img src="../assets/curve.png" alt="curve" class="wave" />
+
       <div class="contentBx">
         <h2 style="margin-bottom: 0.5em;">Hi, {{ user.nickName }}!</h2>
 
         <div v-if="isSpin">
           <b-spinner medium type="grow" variant="light"></b-spinner>
         </div>
-
         <div v-else>
-
-          <h3 class="text-break" id="hint--word" v-for="(item, index) in hint" :key="index">คำใบ้ {{index+1}} > {{item}}</h3>
+          <h3
+            v-if="hint.length > 1"
+            id="hint--word"
+            style="font-size: 2.5rem; text-decoration: underline;"
+          >JACKPOT!!</h3>
+          <h3 class="text-break" id="hint--word" v-for="(item, index) in hint" :key="index">
+            <span class="d-block">คำใบ้พี่คนที่ {{index+1}} ></span>
+            <span id="font-hint">{{item}}</span>
+          </h3>
         </div>
 
         <a @click="toggle()" id="button" style="cursor: pointer;" v-if="!user.random">
           <span>Random Now!</span>
         </a>
+        <div class="rainbow"></div>
       </div>
       <div class="imgBx">
         <img src="../assets/minion.png" alt="mario" />
@@ -61,7 +66,7 @@ export default {
         s_id: this.user.s_id,
         permission: this.user.permission,
       });
-      setTimeout(() => this.$emit("loadHint"), 3000);
+      this.$emit("loadHint");
     },
   },
   computed: {
@@ -108,24 +113,29 @@ header .logo {
   text-decoration: none;
   font-weight: 600;
 }
-header nav {
-  position: relative;
-}
-header nav ul {
-  position: relative;
-  display: flex;
-}
-header nav ul li {
-  list-style: none;
-}
-header nav ul li a {
+header .logo:hover {
   color: #fff;
+}
+.nav-logout {
+  position: fixed;
+  top: 20px;
+  right: 15px;
+}
+
+#logout {
+  background-color: red;
+  padding: 0.3rem;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: bold;
   font-size: 18px;
   text-decoration: none;
   cursor: pointer;
 }
-header nav ul li a:hover {
-  color: #fab219;
+#logout:hover {
+  color: white;
+  box-shadow: 0 0 10px white;
+  transition: 0.5s;
 }
 section {
   position: relative;
@@ -136,7 +146,6 @@ section {
   padding: 0 100px;
 }
 section .contentBx {
-  position: relative;
   max-width: 600px;
   z-index: 1000;
 }
@@ -262,6 +271,7 @@ section .sci li a {
 }
 
 #hint--word {
+  /* font-size: ; */
   margin-bottom: 0.3em;
   display: block;
   color: white;
@@ -338,6 +348,9 @@ section .sci li a {
     display: block;
     color: white;
     max-width: 8em;
+  }
+  #font-hint {
+    font-size: 1.5rem;
   }
 }
 </style>

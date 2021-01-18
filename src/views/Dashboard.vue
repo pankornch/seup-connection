@@ -41,17 +41,15 @@ export default {
   },
   methods: {
     loadHint() {
-      this.$store.dispatch("getHint", {
-        s_id: this.user.s_id,
-        permission: this.user.permission,
-      });
+      this.$store.dispatch("getHint", this.user.s_id );
     },
   },
   watch: {
     user(a, b) {
       if (a) {
-        this.loadHint()
-        setTimeout( () => this.isLoading = false , 500); }
+        this.loadHint();
+        setTimeout(() => (this.isLoading = false), 1000);
+      }
     },
   },
 };
